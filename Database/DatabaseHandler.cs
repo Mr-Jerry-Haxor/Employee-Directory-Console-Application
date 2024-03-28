@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using Employee_Directory;
 
-namespace DatabaseHandler
+namespace DatabaseHandler1
 {
     class Database
     {
