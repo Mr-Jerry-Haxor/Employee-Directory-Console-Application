@@ -8,12 +8,13 @@ namespace Role_functions
     class Role
     {
         string[] RoleFields = Datatypes.Rolefields;
-        string[] ROleRequiredFields = Datatypes.requiredRoleFields;
+        string[] RoleRequiredFields = Datatypes.requiredRoleFields;
+        string[] RoleFieldsFormat = Datatypes.RoleFieldsFormat;
         // add role
         public void AddRole()
         {
             DataInput dataInput = new DataInputHandler.DataInput();
-            string[] AddRoledata = dataInput.InputData(RoleFields, ROleRequiredFields);
+            string[] AddRoledata = dataInput.InputData(RoleFields, RoleRequiredFields, RoleFieldsFormat);
             // AddRoledata will be added to the database
             Database db = new Database();
             db.AddRoleToDB(AddRoledata);

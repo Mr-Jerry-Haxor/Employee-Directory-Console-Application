@@ -11,6 +11,10 @@ namespace Employee_functions
         static string[] Employeefields = Datatypes.Employeefields;
         string[] notEditableFields = Datatypes.notEditableFields;
         string[] requiredEmployeeFields = Datatypes.requiredEmployeeFields;
+
+        string[] EmployeeFieldsFormat = Datatypes.EmployeeFieldsFormat;
+
+
         ConsoleTable table = new ConsoleTable(
                     "Sr. No.",
                     Employeefields[0],
@@ -29,7 +33,18 @@ namespace Employee_functions
         public void AddEmployee()
         {
             DataInput dataInput = new DataInputHandler.DataInput();
-            string[] AddEmployeeData = dataInput.InputData(Employeefields, requiredEmployeeFields);
+            string[] AddEmployeeData = dataInput.InputData(Employeefields, requiredEmployeeFields, EmployeeFieldsFormat);
+
+            //display and take confirmation from user
+            Console.WriteLine("\n\nEmployee Details\n");
+            string[][] oneEmployeeData = new string[1][];
+            oneEmployeeData[0] = AddEmployeeData;
+            DisplayAsTable(oneEmployeeData);
+
+            if (!confirmOperation())
+            {
+                return;
+            }
 
             // AddEmployeeData will be added to the database
             Database db = new Database();
@@ -62,25 +77,31 @@ namespace Employee_functions
             Console.WriteLine("\n\nEmployee Deleted Successfully\n\n");
         }
 
+
+        public void DisplayAsTable(string[][] tabledata)
+        {
+            if (tabledata.Length == 0)
+            {
+                Console.WriteLine("No Employees Found");
+            }
+            else
+            {
+                for (int i = 0; i < tabledata.Length; i++)
+                {
+                    table.AddRow(i+1, tabledata[i][0] , tabledata[i][1] , tabledata[i][2] , tabledata[i][3] , tabledata[i][4] , tabledata[i][5] , tabledata[i][6] , tabledata[i][7] , tabledata[i][8] , tabledata[i][9] , tabledata[i][10] , tabledata[i][11]);
+                }
+
+                table.Write();
+            }
+        }
+
         // display all employees
         public void DisplayAll()
         {
             // get all the employees from the database and display them
             Database db = new Database();
             string[][] AllemployeeData = db.GetAllEmployeesFromDB() ?? new string[0][];
-            if (AllemployeeData.Length == 0)
-            {
-                Console.WriteLine("No Employees Found");
-            }
-            else
-            {
-                for (int i = 0; i < AllemployeeData.Length; i++)
-                {
-                    table.AddRow(i+1, AllemployeeData[i][0] , AllemployeeData[i][1] , AllemployeeData[i][2] , AllemployeeData[i][3] , AllemployeeData[i][4] , AllemployeeData[i][5] , AllemployeeData[i][6] , AllemployeeData[i][7] , AllemployeeData[i][8] , AllemployeeData[i][9] , AllemployeeData[i][10] , AllemployeeData[i][11]);
-                }
-
-                table.Write();
-            }
+            DisplayAsTable(AllemployeeData);
         }
 
         // dispaly one employee
@@ -88,18 +109,45 @@ namespace Employee_functions
         {
             // get the employee from the database and display the employee
             Database db = new Database();
-            string[] oneEmployeeData = db.GetOneEmployeeFromDB(empid) ?? new string[0];
-
-            if (oneEmployeeData.Length == 0)
-            {
-                Console.WriteLine("Employee not found");
-            }
-            else
-            {
-                table.AddRow("1" , oneEmployeeData[0] , oneEmployeeData[1] , oneEmployeeData[2] , oneEmployeeData[3] , oneEmployeeData[4] , oneEmployeeData[5] , oneEmployeeData[6] , oneEmployeeData[7] , oneEmployeeData[8] , oneEmployeeData[9] , oneEmployeeData[10] , oneEmployeeData[11]);
-                table.Write();
-            }
+            string[][] oneEmployeeData = new string[1][];
+            oneEmployeeData[0] = db.GetOneEmployeeFromDB(empid) ?? new string[0];
+            DisplayAsTable(oneEmployeeData);
         }
 
+
+        public bool confirmOperation()
+        {
+            System.Console.WriteLine("Do you want to continue? \n 1. Save Details \n 2. Cancel");
+            int n = 0;
+            while (true)
+            {   
+                System.Console.Write("Enter your choice: ");
+                string? num = Console.ReadLine()?.Trim();
+
+                if (int.TryParse(num, out n))
+                {
+                    if (n == 1)
+                    {
+                        return true;
+                    }
+                    else if (n == 2)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Enter 1 or 2 only.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Enter number only.");
+                }
+            }
+
+            // This will never be reached, but it satisfies the compiler's requirement for a return at the end of the method.
+            throw new InvalidOperationException("Unexpected error in confirmOperation method");
+        }
     }
 }
+

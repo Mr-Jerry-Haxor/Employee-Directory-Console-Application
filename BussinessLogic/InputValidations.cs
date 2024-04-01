@@ -27,7 +27,31 @@ namespace Employee_Directory
             }
             else if (fieldname == "RoleId" )
             {
-                
+                string pattern = @"^R\d{4}$";
+                if (!Regex.IsMatch(input, pattern))
+                {
+                    Console.WriteLine("Role Id should start with 'R' and followed by 4 digits");
+                    return false;
+                }
+                else if (new Database().CheckRoleExists(input))
+                {
+                    Console.WriteLine("Role Id already exists");
+                    return false;
+                }
+
+            }
+            else if (fieldname == "FirstName" || fieldname == "LastName" || fieldname == "Location" || fieldname == "JobTitle" || fieldname == "Department" || fieldname == "RoleName" || fieldname == "RoleDescription" )
+            {
+                if (input.Length < 2)
+                {
+                    Console.WriteLine(fieldname + " should be of minimum 2 characters");
+                    return false;
+                }
+                if (!Regex.IsMatch(input, @"^[a-zA-Z\s]+$"))
+                {
+                    Console.WriteLine(fieldname + " should start with only alphabets");
+                    return false;
+                }
             }
             else if (fieldname == "DateOfBirth" || fieldname == "JoiningDate")
             {
@@ -38,7 +62,7 @@ namespace Employee_Directory
                     return false;
                 }
                 //checking the date is valid date
-                else if (!DateTime.TryParse(input, out _))
+                else if (!DateTime.TryParseExact(input, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out _))
                 {
                     Console.WriteLine("Invalid Date");
                     return false;
@@ -46,7 +70,7 @@ namespace Employee_Directory
                 else 
                 {
                     // check if the age is greater than 18
-                    DateTime dob = DateTime.Parse(input);
+                    DateTime dob = DateTime.ParseExact(input, "dd-MM-yyyy", null);
                     DateTime today = DateTime.Today;
                     int age = today.Year - dob.Year;
                     if (dob > today.AddYears(-age))
@@ -64,7 +88,6 @@ namespace Employee_Directory
                         return false;
                     }
                 }
-                
             }
             else if (fieldname == "Email")
             {
@@ -84,19 +107,7 @@ namespace Employee_Directory
                     return false;
                 }
             }
-            else if (fieldname == "FirstName" || fieldname == "LastName" || fieldname == "Location" || fieldname == "JobTitle" || fieldname == "Department" || fieldname == "RoleName" || fieldname == "RoleDescription" )
-            {
-                if (input.Length < 2)
-                {
-                    Console.WriteLine(fieldname + " should be of minimum 2 characters");
-                    return false;
-                }
-                if (!Regex.IsMatch(input, @"^[a-zA-Z]+$"))
-                {
-                    Console.WriteLine(fieldname + " should start with only alphabets");
-                    return false;
-                }
-            }
+            
 
             return true;
         }

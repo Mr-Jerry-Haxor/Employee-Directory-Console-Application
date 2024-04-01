@@ -180,7 +180,7 @@ namespace DatabaseHandler
 
                     {"RoleId", AddRoledata[0]},
                     {"RoleName", AddRoledata[1]},
-                    {"Department", AddRoledata[2]},
+                    {"RoleDepartment", AddRoledata[2]},
                     {"RoleDescription", AddRoledata[3]},
                     {"Location", AddRoledata[4]}
                 };
@@ -207,7 +207,7 @@ namespace DatabaseHandler
                 string[][] roles = new string[documents.Count][];
                 for (int j = 0; j < documents.Count; j++)
                 {
-                    string[] role = new string[4];
+                    string[] role = new string[5];
                     role[0] = documents[j]["RoleId"]?.ToString() ?? string.Empty;
                     role[1] = documents[j]["RoleName"]?.ToString() ?? string.Empty;
                     role[2] = documents[j]["Department"]?.ToString() ?? string.Empty;
@@ -221,6 +221,32 @@ namespace DatabaseHandler
             catch (Exception ex)
             {
                 Console.WriteLine("Error while getting all roles :" + ex.Message);
+                throw;
+            }
+        }
+
+        // get all data of the particular filed in roles collection
+        internal string[]? GetAllDataOfFieldFromRolesCollection(string fieldName)
+        {
+            try
+            {
+                var database = connect();
+                var collection = database.GetCollection<BsonDocument>("roles");
+
+                var projection = Builders<BsonDocument>.Projection.Include(fieldName);
+                var documents = collection.Find(new BsonDocument()).Project(projection).ToList();
+
+                string[] data = new string[documents.Count];
+                for (int i = 0; i < documents.Count; i++)
+                {
+                    data[i] = documents[i][fieldName]?.ToString() ?? string.Empty;
+                }
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while getting all data of field from roles collection: " + ex.Message);
                 throw;
             }
         }
@@ -251,6 +277,33 @@ namespace DatabaseHandler
                 throw;
             }
         }
+
+
+        //check id roleid exists or not
+        internal bool CheckRoleExists(string roleid)
+        {
+            try
+            {
+                var database = connect();
+                var collection = database.GetCollection<BsonDocument>("roles");
+                var filter = Builders<BsonDocument>.Filter.Eq("RoleId", roleid);
+                var document = collection.Find(filter).FirstOrDefault();
+                if (document != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while checking role exists :" + ex.Message);
+                throw;
+            }
+        }
+
 
 
     }
