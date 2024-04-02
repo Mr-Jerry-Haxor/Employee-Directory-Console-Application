@@ -210,7 +210,7 @@ namespace DatabaseHandler
                     string[] role = new string[5];
                     role[0] = documents[j]["RoleId"]?.ToString() ?? string.Empty;
                     role[1] = documents[j]["RoleName"]?.ToString() ?? string.Empty;
-                    role[2] = documents[j]["Department"]?.ToString() ?? string.Empty;
+                    role[2] = documents[j]["RoleDepartment"]?.ToString() ?? string.Empty;
                     role[3] = documents[j]["RoleDescription"]?.ToString() ?? string.Empty;
                     role[4] = documents[j]["Location"]?.ToString() ?? string.Empty;
                     roles[j] = role;

@@ -36,13 +36,9 @@ namespace EmployeeDirectory
                 //check the user state and change the user state
 
                 userstate = handlechoice.CheckStateAndChange(userstate, n);
-
-
             }
-
         }
     }
-
 }
 
 

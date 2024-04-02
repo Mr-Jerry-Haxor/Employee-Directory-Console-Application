@@ -131,6 +131,11 @@ namespace HandleUserChoice
             }
             Database db = new Database();
 
+            if (empid.Equals("/q"))
+            {
+                return "/q";
+            }
+
             if (db.CheckEmployeeExists(empid))
             {
                 return empid;

@@ -15,7 +15,7 @@ namespace Employee_functions
         string[] EmployeeFieldsFormat = Datatypes.EmployeeFieldsFormat;
 
 
-        ConsoleTable table = new ConsoleTable(
+        public ConsoleTable table = new ConsoleTable(
                     "Sr. No.",
                     Employeefields[0],
                     Employeefields[1],
@@ -62,7 +62,7 @@ namespace Employee_functions
             string[] CurrentData = db.GetOneEmployeeFromDB(empid) ?? new string[12];
 
             DataInput dataInput = new DataInputHandler.DataInput();
-            string[] EditEmployeeData = dataInput.EditData(Employeefields, CurrentData, notEditableFields, requiredEmployeeFields);
+            string[] EditEmployeeData = dataInput.EditDataByChoice(Employeefields, CurrentData, notEditableFields, requiredEmployeeFields);
 
 
             db.EditEmployeeInDB(EditEmployeeData);
