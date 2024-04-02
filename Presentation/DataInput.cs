@@ -137,7 +137,7 @@ namespace DataInputHandler
 
                 emp.table.Write();
                 Console.WriteLine("\n\n");
-                
+
                 int choice = ChooseField(fields);
 
                 if (choice.Equals(0))
@@ -153,9 +153,6 @@ namespace DataInputHandler
                 {
                     CurrentData[choice - 1] = HandleFieldChoice(fields, data, notEditableFields, requiredFields, choice);
                 }
-
-                
-
             }
             for (int i  = 0; i < data.Length;i++)
             {
